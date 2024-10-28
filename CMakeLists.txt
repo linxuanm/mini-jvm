@@ -15,5 +15,7 @@ add_library(vm ${VM_LIB_SRCS})
 target_include_directories(vm PRIVATE ${VM_DIR}/inc)
 
 add_executable(mini_jvm main.cpp
+    src/vm/Machine.cpp
+    inc/vm/Machine.h
 )
 target_link_libraries(mini_jvm vm)
