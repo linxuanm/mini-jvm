@@ -7,4 +7,5 @@ set(ROOT ${CMAKE_SOURCE_DIR})
 include(lib_vm.cmake)
 
 add_executable(mini_jvm main.cpp)
+target_include_directories(mini_jvm PRIVATE ${ROOT}/inc)
 target_link_libraries(mini_jvm core vm)
