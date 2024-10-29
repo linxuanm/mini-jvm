@@ -19,6 +19,7 @@ struct TraceOptions {
 };
 
 constexpr int SCREEN_WIDTH = 80;
+constexpr int COL_WIDTH_1 = SCREEN_WIDTH - 4;
 constexpr int COL_WIDTH_2 = (SCREEN_WIDTH - 4) / 2;
 extern TraceOptions OPTIONS;
 
@@ -34,6 +35,7 @@ inline void configure(const TraceOptions &opt) {
     fmt::print("{}Instantiation\n", opt.instantiation ? ON : OFF);
     fmt::print("{}Execution\n", opt.execution ? ON : OFF);
     fmt::print("{}JIT\n", opt.jit ? ON : OFF);
+    fmt::print("\n");
   }
 
   OPTIONS = opt;

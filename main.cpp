@@ -79,5 +79,10 @@ int main(int argc, char *argv[]) {
     break;
   }
 
+  TRACE_DO(B, {
+    Trace::top_bar();
+    // Trace::bottom_bar();
+  });
+
   return 0;
 }

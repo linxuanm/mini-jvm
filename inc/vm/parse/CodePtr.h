@@ -63,7 +63,7 @@ private:
 
   u8 _read_u8() {
     const auto val = (*buf)[pc++];
-    TRACE_DO(B, { if (trace_read) Trace::O("{:02X} ", val); });
+    TRACE_DO(B, { if (trace_read) Trace::OS("{:02X} ", val); });
     return val;
   }
 
