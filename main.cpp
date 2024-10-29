@@ -1,6 +1,7 @@
 #include <cxxopts.hpp>
 
 #include "core/trace.h"
+#include "vm/loader/ClassLoader.h"
 
 #include <iostream>
 
@@ -63,7 +64,20 @@ int main(int argc, char *argv[]) {
   const auto path = process_path_option(result);
   process_trace_options(result);
 
-
+  // TODO: proper structure
+  ClassLoader loader;
+  auto [kind, parse_error] = loader.load_class_file(path);
+  switch (kind) {
+  case CL_FileNotFound:
+    std::cerr << "No such file or directory: " << path << std::endl;
+    break;
+  case CL_FileFormatError:
+    std::cerr << "Format error: " << path << std::endl;
+    break;
+  case CL_Ok:
+    std::cerr << "OK" << std::endl;
+    break;
+  }
 
   return 0;
 }

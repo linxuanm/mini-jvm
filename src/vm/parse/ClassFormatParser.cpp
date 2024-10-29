@@ -2,5 +2,5 @@
 
 
 void ClassFormatParser::parse(ClassFile &cf, ByteArrayRef ref) {
-
+  parser.reset(ref, 0);
 }

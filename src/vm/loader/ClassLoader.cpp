@@ -11,7 +11,8 @@ CLResult ClassLoader::load_class_file(const std::string &path) {
   if (file.fail())
     return {CL_FileNotFound};
 
-  ByteArray buf((std::istream_iterator<u8>(file)), std::istream_iterator<u8>());
+  const ByteArray buf((std::istream_iterator<u8>(file)),
+                      std::istream_iterator<u8>());
 
   ClassFile cf;
   cfparser.parse(cf, &buf);
