@@ -4,6 +4,7 @@
 
 #include "core/trace.h"
 #include "core/vmdefs.h"
+#include "core/error//VMError.h"
 
 #define CHECK_BOUNDS(n_read, ret_val, err_ret_val) \
   do { \
@@ -12,7 +13,7 @@
     return ret_val; \
   } while (0)
 
-struct CodePtrError {
+struct CodePtrError : public VMError {
   bool ok       = false;
   pc_t pos      = 0;
   u32 read_size = 0;
