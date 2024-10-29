@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_CXX_STANDARD 20)
 project(mini_jvm)
 
+option(ENABLE_TRACE "Enables runtime tracing options" ON)
+
 set(ROOT ${CMAKE_SOURCE_DIR})
 
 include(FetchContent)
