@@ -4,7 +4,7 @@ Some Unicode characters for trace rendering:
 │ test │
 ╰──────╯
 
-╭─────────╮
+╭──────────╮
 │   test   │
 ├── test ──┤
 │   test   │

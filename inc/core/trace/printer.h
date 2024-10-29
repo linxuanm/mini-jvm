@@ -58,6 +58,11 @@ inline void center_text(const std::string &s) {
 inline void top_bar() { Comp::bar_with_bounds("╭", "╮"); }
 inline void bottom_bar() { Comp::bar_with_bounds("╰", "╯"); }
 inline void mid_bar() { Comp::bar_with_bounds("├", "┤"); }
+inline void title(const std::string &s) {
+  top_bar();
+  center_text(s);
+  mid_bar();
+}
 
 inline void mid_bar_text(const std::string &s) {
   const auto padded = fmt::format(" {} ", trunc_to_width(s, COL_WIDTH_1));

@@ -61,12 +61,7 @@ private:
   bool trace_read = false;
   CodePtrError err;
 
-  u8 _read_u8() {
-    const auto val = (*buf)[pc++];
-    TRACE_DO(B, { if (trace_read) Trace::OS("{:02X} ", val); });
-    return val;
-  }
-
+  u8 _read_u8() { return (*buf)[pc++]; }
   u16 _read_u16() { return static_cast<u16>(_read_u8()) << 8 | (*buf)[pc++]; }
   u32 _read_u32() { return static_cast<u32>(_read_u16()) << 16 | (*buf)[pc++]; }
   u64 _read_u64() { return static_cast<u64>(_read_u32()) << 32 | (*buf)[pc++]; }
