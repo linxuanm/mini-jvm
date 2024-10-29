@@ -12,5 +12,7 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
+typedef u32 pc_t;
+
 typedef std::vector<u8> ByteArray;
-typedef const ByteArray &ByteArrayRef;
+typedef const ByteArray *ByteArrayRef;

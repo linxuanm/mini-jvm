@@ -10,12 +10,12 @@
 namespace Trace {
 
 struct TraceOptions {
-  bool runtime;
-  bool binparse;
-  bool validation;
-  bool instantiation;
-  bool execution;
-  bool jit;
+  bool runtime = false;
+  bool binparse = false;
+  bool validation = false;
+  bool instantiation = false;
+  bool execution = false;
+  bool jit = false;
 };
 
 constexpr int SCREEN_WIDTH = 80;

@@ -1,6 +1,6 @@
 #include <cxxopts.hpp>
 
-#include "trace/macros.h"
+#include "core/trace.h"
 
 #include <iostream>
 
@@ -9,12 +9,10 @@ int main(int argc, char *argv[]) {
                            "JVM implementation for research purposes");
   options.add_options()
       ("t,trace", "Tracing options", cxxopts::value<std::string>());
-  auto result = options.parse(argc, argv);
+  const auto result = options.parse(argc, argv);
 
 #ifndef ENABLE_TRACE
-  Trace::TraceOptions opts{
-      false, false, false, false, false, false
-  };
+  Trace::TraceOptions opts;
   for (const auto i : result["trace"].as<std::string>()) {
     switch (i) {
     case 'r':
