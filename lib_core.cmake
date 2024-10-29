@@ -2,7 +2,7 @@ option(ENABLE_TRACE "Enables runtime tracing options" ON)
 
 file(GLOB_RECURSE LIB_CORE_SRC ${ROOT}/src/core/*.cpp)
 add_library(core STATIC ${LIB_CORE_SRC})
-target_include_directories(core PRIVATE ${ROOT}/inc ${ROOT}/inc/core)
+target_include_directories(core PRIVATE ${ROOT}/inc)
 
 if(ENABLE_TRACE)
   include(lib_trace.cmake)

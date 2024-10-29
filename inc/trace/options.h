@@ -2,7 +2,7 @@
 
 #include <fmt/core.h>
 
-#include "color.h"
+#include "trace/color.h"
 
 #define GEN_TRACE_FUNC_FOR(short, opt_entry) \
   inline bool short() { return OPTIONS.opt_entry; }
