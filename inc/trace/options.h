@@ -10,12 +10,12 @@
 namespace Trace {
 
 struct TraceOptions {
-  bool runtime = false;
-  bool binparse = false;
-  bool validation = false;
+  bool runtime       = false;
+  bool binparse      = false;
+  bool validation    = false;
   bool instantiation = false;
-  bool execution = false;
-  bool jit = false;
+  bool execution     = false;
+  bool jit           = false;
 };
 
 constexpr int SCREEN_WIDTH = 80;
@@ -23,9 +23,9 @@ extern TraceOptions OPTIONS;
 
 inline void configure(const TraceOptions &opt) {
   if (opt.runtime) {
-    auto ON = fmt::format("{}✅ {}", Color::GREEN, Color::UNDERLINE);
+    auto ON  = fmt::format("{}✅ {}", Color::GREEN, Color::UNDERLINE);
     auto OFF = fmt::format("{}❌ ", Color::RED);
-    
+
     fmt::print("{}Tracing Configuration:\n{}", Color::BOLD, Color::DEFAULT);
     fmt::print("{}Runtime\n", ON);
     fmt::print("{}Binary Parsing\n", opt.binparse ? ON : OFF);

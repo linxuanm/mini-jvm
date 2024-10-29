@@ -1,5 +1,11 @@
 #pragma once
 
-#include "parse/CodePtr.h"
+#include "vm/parse/CodePtr.h"
 
+class ByteParser : public CodePtr {
 
+public:
+
+private:
+
+};

@@ -13,8 +13,8 @@
   } while (0)
 
 struct CodePtrError {
-  bool ok = false;
-  pc_t pos = 0;
+  bool ok       = false;
+  pc_t pos      = 0;
   u32 read_size = 0;
   std::string msg;
 };
