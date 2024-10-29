@@ -22,16 +22,22 @@ struct CodePtrError {
 class CodePtr {
 
 public:
-  explicit CodePtr(bool trace = false): buf(nullptr), pc(0), trace_read(trace) {
+  explicit CodePtr(bool trace = false): trace_read(trace) {
   }
 
   [[nodiscard]] bool ok() const { return error.ok; }
   [[nodiscard]] bool more() const { return pc < buf->size(); }
   [[nodiscard]] const CodePtrError &err() const { return error; }
-  void reset(pc_t pos) { pc = pos, error = {}; }
-  void reset(ByteArrayRef b, pc_t pos) { pc = pos, buf = b, error = {}; }
   void set_trace_read(bool trace) { trace_read = trace; }
+  void reset(pc_t pos) { pc = pos, error = {}; }
+  void reset(ByteArrayRef b, pc_t pos) {
+    pc = pos, buf = b, error = {}, addr_width = 0;
+    for (u32 len = buf->size() - 1; len > 0; addr_width++, len /= 10);
+  }
 
+  [[nodiscard]] std::string format_pc() const {
+    return fmt::format("{:+{}}", static_cast<int>(pc), addr_width);
+  }
 
   u8 read_u8() { CHECK_BOUNDS(1, _read_u8(), 0); }
   u16 read_u16() { CHECK_BOUNDS(2, _read_u16(), 0); }
@@ -45,10 +51,11 @@ public:
   void skip_n(u32 n) { CHECK_BOUNDS(n, void(pc += n), void()); }
 
 private:
-  ByteArrayRef buf;
-  pc_t pc;
+  ByteArrayRef buf = nullptr;
+  pc_t pc = 0;
+  u32 addr_width = 0;
 
-  bool trace_read;
+  bool trace_read = false;
   CodePtrError error;
 
   u8 _read_u8() {

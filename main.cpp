@@ -8,7 +8,11 @@ int main(int argc, char *argv[]) {
   cxxopts::Options options("Mini JVM",
                            "JVM implementation for research purposes");
   options.add_options()
-      ("t,trace", "Tracing options", cxxopts::value<std::string>());
+      ("class", "Class file to load", cxxopts::value<std::string>())
+      ("t,trace", "Tracing options (string consisting of {r, b, v, i, e, j})",
+       cxxopts::value<std::string>()->default_value(""));
+
+  options.parse_positional({"class"});
   const auto result = options.parse(argc, argv);
 
 #ifndef ENABLE_TRACE
