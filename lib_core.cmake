@@ -14,7 +14,5 @@ FetchContent_MakeAvailable(fmt)
 target_link_libraries(core PUBLIC fmt::fmt)
 
 if(ENABLE_TRACE)
-  include(lib_trace.cmake)
-  target_link_libraries(core PUBLIC trace)
   target_compile_definitions(core PRIVATE ENABLE_TRACE=1)
 endif()
