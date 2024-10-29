@@ -1,4 +1,4 @@
-Some unicode characters for trace rendering:
+Some Unicode characters for trace rendering:
 
 ╭──────╮
 │ test │

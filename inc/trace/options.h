@@ -19,6 +19,7 @@ struct TraceOptions {
 };
 
 constexpr int SCREEN_WIDTH = 80;
+constexpr int COL_WIDTH_2 = (SCREEN_WIDTH - 4) / 2;
 extern TraceOptions OPTIONS;
 
 inline void configure(const TraceOptions &opt) {
