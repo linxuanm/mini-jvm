@@ -1,3 +1,3 @@
-#include "trace/options.h"
+#include "core/trace/options.h"
 
 Trace::TraceOptions Trace::OPTIONS;
