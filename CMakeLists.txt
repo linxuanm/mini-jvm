@@ -4,8 +4,6 @@ project(mini_jvm)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
 
-include(lib_vm.cmake)
-
 include(FetchContent)
 FetchContent_Declare(
     cxxopts
@@ -15,4 +13,6 @@ FetchContent_MakeAvailable(cxxopts)
 
 add_executable(mini_jvm main.cpp)
 target_include_directories(mini_jvm PRIVATE ${ROOT}/inc)
-target_link_libraries(mini_jvm core vm cxxopts)
+
+include(lib_vm.cmake)
+target_link_libraries(mini_jvm vm cxxopts)
