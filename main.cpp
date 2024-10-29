@@ -4,20 +4,16 @@
 
 #include <iostream>
 
-int main(int argc, char *argv[]) {
-  cxxopts::Options options("Mini JVM",
-                           "JVM implementation for research purposes");
-  options.add_options()
-      ("class", "Class file to load", cxxopts::value<std::string>())
-      ("t,trace", "Tracing options (string consisting of {r, b, v, i, e, j})",
-       cxxopts::value<std::string>()->default_value(""));
+struct ArgParseError {
+  bool ok = true;
+  std::string arg_name;
+  std::string msg;
+};
 
-  options.parse_positional({"class"});
-  const auto result = options.parse(argc, argv);
-
+void process_trace_options(const cxxopts::ParseResult &res) {
 #ifndef ENABLE_TRACE
   Trace::TraceOptions opts;
-  for (const auto i : result["trace"].as<std::string>()) {
+  for (const auto i : res["trace"].as<std::string>()) {
     switch (i) {
     case 'r':
       opts.runtime = true;
@@ -42,8 +38,22 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
   }
-  Trace::configure(opts);
+  configure(opts);
 #endif
+}
+
+int main(int argc, char *argv[]) {
+  cxxopts::Options options("Mini JVM",
+                           "JVM implementation for research purposes");
+  options.add_options()
+      ("class", "Class file to load", cxxopts::value<std::string>())
+      ("t,trace", "Tracing options (string consisting of {r, b, v, i, e, j})",
+       cxxopts::value<std::string>()->default_value(""));
+
+  options.parse_positional({"class"});
+  const auto result = options.parse(argc, argv);
+
+  process_trace_options(result);
 
   return 0;
 }

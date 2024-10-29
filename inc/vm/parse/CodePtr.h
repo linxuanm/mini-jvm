@@ -13,7 +13,7 @@
     return ret_val; \
   } while (0)
 
-struct CodePtrError : public VMError {
+struct CodePtrError {
   bool ok       = false;
   pc_t pos      = 0;
   u32 read_size = 0;
