@@ -1,0 +1,11 @@
+Some unicode characters for trace rendering:
+
+╭──────╮
+│ test │
+╰──────╯
+
+╭──────────╮
+│   test   │
+├── test ──┤
+│   test   │
+╰──────────╯
