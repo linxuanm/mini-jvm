@@ -1,3 +1,5 @@
+sample_java/*.class
+
 ### C++ ###
 # Prerequisites
 *.d
