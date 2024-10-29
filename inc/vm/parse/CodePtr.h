@@ -16,7 +16,7 @@
   } while (0)
 
 struct CodePtrError {
-  bool ok       = false;
+  bool ok       = true;
   pc_t pos      = 0;
   u32 read_size = 0;
   std::string msg;
@@ -28,13 +28,13 @@ public:
   explicit CodePtr(bool trace = false): trace_read(trace) {
   }
 
-  [[nodiscard]] bool ok() const { return error.ok; }
+  [[nodiscard]] bool ok() const { return err.ok; }
   [[nodiscard]] bool more() const { return pc < buf->size(); }
-  [[nodiscard]] const CodePtrError &err() const { return error; }
+  [[nodiscard]] const CodePtrError &error() const { return err; }
   void set_trace_read(bool trace) { trace_read = trace; }
-  void reset(pc_t pos) { pc = pos, error = {}; }
+  void reset(pc_t pos) { pc = pos, err = {}; }
   void reset(ByteArrayRef b, pc_t pos) {
-    pc = pos, buf = b, error = {}, addr_width = 0;
+    pc = pos, buf = b, err = {}, addr_width = 0;
     for (u32 len = buf->size() - 1; len > 0; addr_width++, len /= 10);
   }
 
@@ -59,7 +59,7 @@ private:
   u32 addr_width = 0;
 
   bool trace_read = false;
-  CodePtrError error;
+  CodePtrError err;
 
   u8 _read_u8() {
     const auto val = (*buf)[pc++];
@@ -72,8 +72,8 @@ private:
   u64 _read_u64() { return static_cast<u64>(_read_u32()) << 32 | (*buf)[pc++]; }
 
   void set_err(pc_t pos, u32 read_size, const std::string &msg) {
-    if (error.ok || pos < error.pos)
-      error = {false, pos, read_size, msg};
+    if (err.ok || pos < err.pos)
+      err = {false, pos, read_size, msg};
   }
 
   void err_eof(u32 size) { set_err(pc, size, "unexpected EOF"); }
