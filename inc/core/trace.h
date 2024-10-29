@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef ENABLE_TRACE
+#ifdef ENABLE_TRACE
 
 #include "core/display/color.h"
 #include "core/trace/macros.h"
@@ -12,7 +12,7 @@
 
 #else
 
-#define TRACE_OUT
-#define TRACE_DO
+#define TRACE_OUT(opt, format, ...)
+#define TRACE_DO(opt, stmts)
 
 #endif

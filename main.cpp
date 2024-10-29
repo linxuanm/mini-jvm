@@ -4,14 +4,8 @@
 
 #include <iostream>
 
-struct ArgParseError {
-  bool ok = true;
-  std::string arg_name;
-  std::string msg;
-};
-
 void process_trace_options(const cxxopts::ParseResult &res) {
-#ifndef ENABLE_TRACE
+#ifdef ENABLE_TRACE
   Trace::TraceOptions opts;
   for (const auto i : res["trace"].as<std::string>()) {
     switch (i) {
@@ -39,7 +33,20 @@ void process_trace_options(const cxxopts::ParseResult &res) {
     }
   }
   configure(opts);
+#else
+  if (res.count("trace") != 0) {
+    std::cerr << "Invalid argument --trace: VM is not compiled with tracing on";
+    exit(1);
+  }
 #endif
+}
+
+std::string process_path_option(const cxxopts::ParseResult &res) {
+  if (res.count("class") == 0) {
+    std::cerr << "Invalid argument --class: no class file specified";
+    exit(1);
+  }
+  return res["class"].as<std::string>();
 }
 
 int main(int argc, char *argv[]) {
@@ -53,7 +60,10 @@ int main(int argc, char *argv[]) {
   options.parse_positional({"class"});
   const auto result = options.parse(argc, argv);
 
+  const auto path = process_path_option(result);
   process_trace_options(result);
+
+
 
   return 0;
 }

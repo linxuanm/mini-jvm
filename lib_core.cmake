@@ -1,5 +1,3 @@
-option(ENABLE_TRACE "Enables runtime tracing options" ON)
-
 file(GLOB_RECURSE LIB_CORE_SRC ${ROOT}/src/core/*.cpp)
 add_library(core STATIC ${LIB_CORE_SRC})
 target_include_directories(core PRIVATE ${ROOT}/inc)
@@ -14,5 +12,5 @@ FetchContent_MakeAvailable(fmt)
 target_link_libraries(core PUBLIC fmt::fmt)
 
 if(ENABLE_TRACE)
-  target_compile_definitions(core PRIVATE ENABLE_TRACE=1)
+  target_compile_definitions(core PUBLIC ENABLE_TRACE=1)
 endif()

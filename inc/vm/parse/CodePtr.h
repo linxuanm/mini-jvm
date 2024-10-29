@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <fmt/core.h>
 
 #include "core/trace.h"
 #include "core/vmdefs.h"
@@ -9,7 +10,8 @@
 #define CHECK_BOUNDS(n_read, ret_val, err_ret_val) \
   do { \
     if (pc + (n_read) >= buf->size()) { \
-      err_eof(n_read); return err_ret_val; } \
+      err_eof(n_read); return err_ret_val; \
+    } \
     return ret_val; \
   } while (0)
 
