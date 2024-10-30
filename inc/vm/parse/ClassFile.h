@@ -5,8 +5,11 @@
 #include <vector>
 
 struct CPInfo {};
+
 struct FieldInfo {};
+
 struct MethodInfo {};
+
 struct AttributeInfo {};
 
 /**

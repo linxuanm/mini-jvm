@@ -45,8 +45,7 @@ std::string Trace::fit_in_width(const std::string &s, int width,
     break;
   }
   }
-  const auto res = ss.str();
-  return res;
+  return ss.str();
 }
 
 void Trace::mid_bar_text(const std::string &s) {

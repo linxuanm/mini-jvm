@@ -1,3 +1,6 @@
 BasedOnStyle: LLVM
 AlignConsecutiveAssignments: true
-ContinuationIndentWidth: 2
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseExpressionOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Always
