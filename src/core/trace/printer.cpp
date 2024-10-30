@@ -14,7 +14,7 @@ std::string Trace::fit_in_width(const std::string &s, int width,
   const bool shorten = plain.length() > width;
   const auto len     = shorten ? width - 4 : plain.length();
   std::stringstream ss;
-  for (auto si = 0, pi = 0; si < len; si++, pi++) {
+  for (auto si = 0, pi = 0; pi < len; si++, pi++) {
     for (; plain[pi] != s[si]; si++)
       ss << s[si];
     ss << plain[pi];
@@ -45,7 +45,8 @@ std::string Trace::fit_in_width(const std::string &s, int width,
     break;
   }
   }
-  return ss.str();
+  const auto res = ss.str();
+  return res;
 }
 
 void Trace::mid_bar_text(const std::string &s) {

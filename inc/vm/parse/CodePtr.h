@@ -31,7 +31,9 @@ public:
   [[nodiscard]] bool ok() const { return err.ok; }
   [[nodiscard]] bool more() const { return pc < buf->size(); }
   [[nodiscard]] const CodePtrError &error() const { return err; }
+  [[nodiscard]] pc_t get_pc() const { return pc; }
   void reset(pc_t pos) { pc = pos, err = {}; }
+
   void reset(ByteArrayRef b, pc_t pos) {
     pc = pos, buf = b, err = {}, addr_width = 0;
     for (u32 len = buf->size() - 1; len > 0; addr_width++, len /= 10);
@@ -56,7 +58,7 @@ protected:
   ByteArrayRef buf = nullptr;
 
 private:
-  pc_t pc = 0;
+  pc_t pc        = 0;
   u32 addr_width = 0;
 
   CodePtrError err;
