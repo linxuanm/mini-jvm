@@ -32,19 +32,22 @@ private:
   ByteParser parser;
   CFParserError err;
 
-  void traces(pc_t pos, const std::vector<TraceEntry>& entries) const;
+  void traces(pc_t pos, const std::vector<TraceEntry> &entries) const;
 
-  void err_atpc(CFErrorKind kind, const std::string &msg) {
+  template <typename... T>
+  void err_atpc(CFErrorKind kind, fmt::format_string<T...> f, T &&... args) {
     if (err.ok || parser.get_pc() < err.pos)
-      err = {false, parser.get_pc(), kind, msg};
+      err = {
+        false, parser.get_pc(), kind,
+        fmt::format(f, std::forward<T>(args)...)
+      };
   }
 
   bool parser_ok() {
     const bool ok = parser.ok();
     if (!ok) {
       auto [ok, pos, read_size, msg] = parser.error();
-      const auto detail = fmt::format("{} (reading {} bytes)", msg, read_size);
-      err_atpc(CF_MalformedBytecode, detail);
+      err_atpc(CF_MalformedBytecode, "{} (reading {} bytes)", msg, read_size);
     }
     return ok;
   }

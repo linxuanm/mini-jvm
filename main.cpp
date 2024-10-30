@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "No such file or directory: " << path << std::endl;
     break;
   case CL_FileFormatError:
-    std::cerr << "Format error: " << path << std::endl;
+    std::cerr << "Format error: " << parse_error.err_msg << std::endl;
     break;
   case CL_Ok:
     std::cerr << "OK" << std::endl;
