@@ -79,17 +79,17 @@ int main(int argc, char *argv[]) {
     break;
   }
 
-  TRACE_DO(B, {
-    Trace::top_bar();
-    Trace::center_text("Hello");
-    Trace::mid_bar();
-    Trace::center_text("");
-    Trace::mid_bar_text("Section title");
-    Trace::center_text("");
-    Trace::col_2("Test", "More Test", Trace::ALIGN_CENTER, Trace::ALIGN_CENTER);
-    Trace::center_text("");
-    Trace::bottom_bar();
-  });
+  // TRACE_DO(B, {
+  //   Trace::top_bar();
+  //   Trace::center_text("Hello");
+  //   Trace::mid_bar();
+  //   Trace::center_text("");
+  //   Trace::mid_bar_text("Section title");
+  //   Trace::center_text("");
+  //   Trace::col_2("Test", "More Test", Trace::ALIGN_CENTER, Trace::ALIGN_CENTER);
+  //   Trace::center_text("");
+  //   Trace::bottom_bar();
+  // });
 
   return 0;
 }

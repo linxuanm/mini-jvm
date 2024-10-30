@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fmt/core.h>
+#include <fmt/color.h>
 
 #include "core/trace.h"
 #include "core/vmdefs.h"
@@ -25,21 +26,19 @@ struct CodePtrError {
 class CodePtr {
 
 public:
-  explicit CodePtr(bool trace = false): trace_read(trace) {
-  }
+  CodePtr() = default;
 
   [[nodiscard]] bool ok() const { return err.ok; }
   [[nodiscard]] bool more() const { return pc < buf->size(); }
   [[nodiscard]] const CodePtrError &error() const { return err; }
-  void set_trace_read(bool trace) { trace_read = trace; }
   void reset(pc_t pos) { pc = pos, err = {}; }
   void reset(ByteArrayRef b, pc_t pos) {
     pc = pos, buf = b, err = {}, addr_width = 0;
     for (u32 len = buf->size() - 1; len > 0; addr_width++, len /= 10);
   }
 
-  [[nodiscard]] std::string format_pc() const {
-    return fmt::format("{:+{}}", static_cast<int>(pc), addr_width);
+  [[nodiscard]] std::string format_pc(pc_t ptr) const {
+    return fmt::format("{:+{}}", static_cast<int>(ptr), addr_width);
   }
 
   u8 read_u8() { CHECK_BOUNDS(1, _read_u8(), 0); }
@@ -53,12 +52,13 @@ public:
   void skip() { CHECK_BOUNDS(1, void(pc++), void()); }
   void skip_n(u32 n) { CHECK_BOUNDS(n, void(pc += n), void()); }
 
-private:
+protected:
   ByteArrayRef buf = nullptr;
+
+private:
   pc_t pc = 0;
   u32 addr_width = 0;
 
-  bool trace_read = false;
   CodePtrError err;
 
   u8 _read_u8() { return (*buf)[pc++]; }
