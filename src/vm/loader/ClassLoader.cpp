@@ -11,8 +11,12 @@ CLResult ClassLoader::load_class_file(const std::string &path) {
   if (file.fail())
     return {CL_FileNotFound};
 
-  const ByteArray buf((std::istream_iterator<u8>(file)),
-                      std::istream_iterator<u8>());
+  file.seekg(0, std::ios::end);
+  std::streampos size = file.tellg();
+  file.seekg(0, std::ios::beg);
+
+  ByteArray buf(size);
+  file.read(reinterpret_cast<char*>(buf.data()), size);
 
   ClassFile cf;
   TRACE_DO(B, { Trace::title(fmt::format("[Binary] {}", path)); });

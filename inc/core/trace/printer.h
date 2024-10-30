@@ -34,6 +34,10 @@ static void bar_with_bounds(const std::string &l, const std::string &r) {
   O("{}{}{}\n", l, ss.str(), r);
 }
 
+static std::string col_1_block(const std::string &s, Align align) {
+  return fit_in_width(s, COL_WIDTH_1, " ", align);
+}
+
 static std::string col_2_block(const std::string &s, Align align) {
   return fit_in_width(s, COL_WIDTH_2, " ", align);
 }
@@ -53,6 +57,10 @@ inline void title(const std::string &s) {
 }
 
 void mid_bar_text(const std::string &s);
+
+inline void col_1(const std::string &s, Align a = ALIGN_LEFT) {
+  O("│ {} │\n", col_1_block(s, a));
+}
 
 inline void col_2(const std::string &a, const std::string &b,
                   Align aa = ALIGN_LEFT, Align ab = ALIGN_LEFT) {

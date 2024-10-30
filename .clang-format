@@ -1,6 +1,6 @@
 BasedOnStyle: LLVM
 AlignConsecutiveAssignments: true
 AllowShortBlocksOnASingleLine: Always
-AllowShortCaseExpressionOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true

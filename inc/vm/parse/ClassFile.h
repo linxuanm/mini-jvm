@@ -4,7 +4,9 @@
 
 #include <vector>
 
-struct CPInfo {};
+struct CPInfo {
+
+};
 
 struct FieldInfo {};
 
