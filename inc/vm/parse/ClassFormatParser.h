@@ -33,7 +33,7 @@ private:
   CFParserError err;
 
   void traces(pc_t pos, const std::vector<TraceEntry> &entries) const;
-  void parse_constant_pool_entry(const ClassFile &cf, u16 i);
+  void parse_constant_pool_entry(ClassFile &cf, u16 &i);
 
   template <typename... T>
   void err_atpc(CFErrorKind kind, fmt::format_string<T...> f, T &&... args) {

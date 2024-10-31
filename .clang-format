@@ -3,4 +3,4 @@ AlignConsecutiveAssignments: true
 AllowShortBlocksOnASingleLine: Always
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Always
-AllowShortCaseLabelsOnASingleLine: true
+#AllowShortCaseLabelsOnASingleLine: true
