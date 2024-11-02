@@ -53,7 +53,7 @@ struct CPInfo {
     struct {
       u16 bootstrap_method_attr_index;
       u16 name_and_type_index;
-    } dynamic_invokedynamic_info;
+    } invokedynamic_info;
 
     struct {
       u16 name_index;

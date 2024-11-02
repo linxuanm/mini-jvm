@@ -67,16 +67,11 @@ void ClassFormatParser::parse_constant_pool_entry(u16 &i) {
     data.methodtype_info.descriptor_index = parser.read_wtag_u16(
         "descriptor index");
     break;
-  case CONSTANT_Dynamic:
   case CONSTANT_InvokeDynamic:
-    data.dynamic_invokedynamic_info.bootstrap_method_attr_index = parser.
+    data.invokedynamic_info.bootstrap_method_attr_index = parser.
         read_wtag_u16("bootstrap method attr index");
-    data.dynamic_invokedynamic_info.name_and_type_index = parser.read_wtag_u16(
+    data.invokedynamic_info.name_and_type_index = parser.read_wtag_u16(
         "name_and_type index");
-    break;
-  case CONSTANT_Module:
-  case CONSTANT_Package:
-    data.module_package_info.name_index = parser.read_wtag_u16("name index");
     break;
   }
   parser_ok();
@@ -124,16 +119,13 @@ void ClassFormatParser::verify_constant_pool_entry(u16 &i) {
     verify_cp_index(data.nameandtype_info.descriptor_index, CONSTANT_Utf8);
     break;
   case CONSTANT_MethodHandle:
+    // TODO
     break;
   case CONSTANT_MethodType:
-    break;
-  case CONSTANT_Dynamic:
+    verify_cp_index(data.methodtype_info.descriptor_index, CONSTANT_Utf8);
     break;
   case CONSTANT_InvokeDynamic:
-    break;
-  case CONSTANT_Module:
-    break;
-  case CONSTANT_Package:
+    // TODO
     break;
   }
 }
@@ -189,8 +181,8 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
   parser.read_wtag_u16("minor version");
   const u16 major = parser.read_wtag_u16("major version");
   if (!parser_ok()) return;
-  if (major != 65)
-    return err_atpc(CF_VersionMismatch, "require version 65, got {}", major);
+  if (major != 52)
+    return err_atpc(CF_VersionMismatch, "require version 52, got {}", major);
 
   TRACE_DO(B, { Trace::mid_bar_text("Constant Pool"); });
   const u16 cf_size = parser.read_wtag_u16("constant pool count");
@@ -200,9 +192,6 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
     TRACE_DO(B, { Trace::col_1(fmt::format("--> entry #{}", i)); });
     parse_constant_pool_entry(i);
     if (!ok()) return;
-  }
-  for (u16 i = 1; i < cf_size; i++) {
-    if (!verify_constant_pool_entry(i)) return;
   }
 
   TRACE_DO(B, { Trace::mid_bar_text("Class Info"); });

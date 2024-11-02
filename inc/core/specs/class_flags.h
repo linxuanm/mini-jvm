@@ -8,8 +8,7 @@ enum ClassAccess {
   ACC_ABSTRACT = 0x0400,
   ACC_SYNTHETIC = 0x1000,
   ACC_ANNOTATION = 0x2000,
-  ACC_ENUM = 0x4000,
-  ACC_MODULE = 0x8000
+  ACC_ENUM = 0x4000
 };
 
 enum ConstantPoolTag {
@@ -26,10 +25,19 @@ enum ConstantPoolTag {
   CONSTANT_NameAndType = 12,
   CONSTANT_MethodHandle = 15,
   CONSTANT_MethodType = 16,
-  CONSTANT_Dynamic = 17,
-  CONSTANT_InvokeDynamic = 18,
-  CONSTANT_Module = 19,
-  CONSTANT_Package = 20
+  CONSTANT_InvokeDynamic = 18
+};
+
+enum ReferenceKind {
+  REF_getField = 1,
+  REF_getStatic = 2,
+  REF_putField = 3,
+  REF_putStatic = 4,
+  REF_invokeVirtual = 5,
+  REF_invokeStatic = 6,
+  REF_invokeSpecial = 7,
+  REF_newInvokeSpecial = 8,
+  REF_invokeInterface = 9
 };
 
 constexpr ClassAccess ACC_FLAGS[] = {
@@ -41,7 +49,6 @@ constexpr ClassAccess ACC_FLAGS[] = {
   ACC_SYNTHETIC,
   ACC_ANNOTATION,
   ACC_ENUM,
-  ACC_MODULE,
   {}
 };
 
@@ -63,8 +70,6 @@ inline const char *render_ACC(ClassAccess ca) {
     return "ACC_ANNOTATION";
   case ACC_ENUM:
     return "ACC_ENUM";
-  case ACC_MODULE:
-    return "ACC_MODULE";
   default:
     return "UNKNOWN";
   }
@@ -98,14 +103,8 @@ inline const char *render_CONSTANT(ConstantPoolTag cpt) {
     return "CONSTANT_MethodHandle";
   case CONSTANT_MethodType:
     return "CONSTANT_MethodType";
-  case CONSTANT_Dynamic:
-    return "CONSTANT_Dynamic";
   case CONSTANT_InvokeDynamic:
     return "CONSTANT_InvokeDynamic";
-  case CONSTANT_Module:
-    return "CONSTANT_Module";
-  case CONSTANT_Package:
-    return "CONSTANT_Package";
   default:
     return "UNKNOWN";
   }
