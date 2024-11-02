@@ -20,7 +20,7 @@ CLResult ClassLoader::load_class_file(const std::string &path) {
 
   ClassFile cf;
   TRACE_DO(B, { Trace::title(fmt::format("[Binary] {}", path)); });
-  cfparser.parse(cf, &buf);
+  cfparser.parse(&cf, &buf);
   if (!cfparser.ok()) { return {CL_FileFormatError, cfparser.error()}; }
 
   return {CL_Ok};
