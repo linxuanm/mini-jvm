@@ -48,10 +48,10 @@ public:
   u16 read_u16() { CHECK_BOUNDS(2, _read_u16(), 0); }
   u32 read_u32() { CHECK_BOUNDS(4, _read_u32(), 0); }
   u64 read_u64() { CHECK_BOUNDS(8, _read_u64(), 0); }
-  i8 read_i8() { return static_cast<i8>(read_u8()); }
-  i16 read_i16() { return static_cast<i16>(read_u16()); }
-  i32 read_i32() { return static_cast<i32>(read_u32()); }
-  i64 read_i64() { return static_cast<i64>(read_u64()); }
+  i8 read_i8() { return std::bit_cast<i8>(read_u8()); }
+  i16 read_i16() { return std::bit_cast<i16>(read_u16()); }
+  i32 read_i32() { return std::bit_cast<i32>(read_u32()); }
+  i64 read_i64() { return std::bit_cast<i64>(read_u64()); }
   void skip() { CHECK_BOUNDS(1, void(pc++), void()); }
   void skip_n(u32 n) { CHECK_BOUNDS(n, void(pc += n), void()); }
 

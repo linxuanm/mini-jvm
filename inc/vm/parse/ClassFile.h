@@ -24,12 +24,20 @@ struct CPInfo {
     } string_info;
 
     struct {
-      u32 bytes;
-    } int_float_info;
+      i32 val;
+    } int_info;
 
     struct {
-      u64 bytes;
-    } long_double_info;
+      float val;
+    } float_info;
+
+    struct {
+      i64 val;
+    } long_info;
+
+    struct {
+      double val;
+    } double_info;
 
     struct {
       u16 name_index;
@@ -62,11 +70,17 @@ struct CPInfo {
   } data;
 };
 
-struct FieldInfo {};
+struct AttributeInfo {};
+
+struct FieldInfo {
+  u16 access_flags;
+  u16 name_index;
+  u16 descriptor_index;
+  std::vector<AttributeInfo> attributes;
+};
 
 struct MethodInfo {};
 
-struct AttributeInfo {};
 
 /**
  * Intermediate representation of a class file whose instantiation is part of

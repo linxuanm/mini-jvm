@@ -30,15 +30,28 @@ void ClassFormatParser::parse_constant_pool_entry(u16 &i) {
     std::strncpy(data.utf8_info.bytes, str.c_str(), length + 1);
     break;
   }
-  case CONSTANT_Integer:
-  case CONSTANT_Float:
-    data.int_float_info.bytes = parser.read_wtag_u32("bytes");
+  case CONSTANT_Integer: {
+    data.int_info.val = parser.read_i32();
+    TRACE_DO(B, { parser.trace_bytes(fmt::format("{}", data.int_info.val), pos, 4); });
     break;
-  case CONSTANT_Long:
-  case CONSTANT_Double:
-    data.long_double_info.bytes = parser.read_wtag_u64("bytes");
+  }
+  case CONSTANT_Float: {
+    data.float_info.val = std::bit_cast<float>(parser.read_u32());
+    TRACE_DO(B, { parser.trace_bytes(fmt::format("{}f", data.float_info.val), pos, 4); });
+    break;
+  }
+  case CONSTANT_Long: {
+    data.long_info.val = parser.read_i64();
+    TRACE_DO(B, { parser.trace_bytes(fmt::format("{}l", data.long_info.val), pos, 8); });
     i++;
     break;
+  }
+  case CONSTANT_Double: {
+    data.double_info.val = std::bit_cast<double>(parser.read_u64());
+    TRACE_DO(B, { parser.trace_bytes(fmt::format("{}d", data.double_info.val), pos, 8); });
+    i++;
+    break;
+  }
   case CONSTANT_Class:
     data.class_info.name_index = parser.read_wtag_u16("name index");
     break;
@@ -125,7 +138,10 @@ void ClassFormatParser::verify_constant_pool_entry(u16 &i) {
     verify_cp_index(data.methodtype_info.descriptor_index, CONSTANT_Utf8);
     break;
   case CONSTANT_InvokeDynamic:
-    // TODO
+    cp_bootstrap_forward_refs.push_back(
+        data.invokedynamic_info.bootstrap_method_attr_index);
+    verify_cp_index(data.invokedynamic_info.name_and_type_index,
+                    CONSTANT_NameAndType);
     break;
   }
 }
@@ -169,6 +185,41 @@ std::string ClassFormatParser::decode_modified_utf8(u16 length) {
   return result;
 }
 
+std::string ClassFormatParser::format_cp_index(u16 i) {
+  const auto &[tag, data] = cf->constant_pool[i];
+  switch (tag) {
+  case CONSTANT_Utf8:
+    return fmt::format("\"{}\"", data.utf8_info.bytes);
+  case CONSTANT_Integer:
+    return fmt::format("{}", static_cast<int>(data.int_info.val));
+  case CONSTANT_Float:
+    return fmt::format("{}f", data.float_info.val);
+  case CONSTANT_Long:
+    break;
+  case CONSTANT_Double:
+    break;
+  case CONSTANT_Class:
+    break;
+  case CONSTANT_String:
+    break;
+  case CONSTANT_Fieldref:
+    break;
+  case CONSTANT_Methodref:
+    break;
+  case CONSTANT_InterfaceMethodref:
+    break;
+  case CONSTANT_NameAndType:
+    break;
+  case CONSTANT_MethodHandle:
+    break;
+  case CONSTANT_MethodType:
+    break;
+  case CONSTANT_InvokeDynamic:
+    break;
+  }
+  return "";
+}
+
 void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
   cf = in_cf;
   parser.reset(ref, 0);
@@ -191,6 +242,10 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
   for (u16 i = 1; i < cf_size; i++) {
     TRACE_DO(B, { Trace::col_1(fmt::format("--> entry #{}", i)); });
     parse_constant_pool_entry(i);
+    if (!ok()) return;
+  }
+  for (u16 i = 1; i < cf_size; i++) {
+    verify_constant_pool_entry(i);
     if (!ok()) return;
   }
 

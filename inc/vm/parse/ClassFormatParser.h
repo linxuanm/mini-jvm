@@ -38,6 +38,14 @@ private:
   ByteParser parser;
   CFParserError err;
 
+  /*
+   * {CONSTANT_InvokeDynamic} references an entry in the {bootstrap_methods}
+   * array that isn't loaded until the attributes section of the class file.
+   * Therefore, those links are stored as forward references here to be
+   * validated during attributes loading.
+   */
+  std::vector<u16> cp_bootstrap_forward_refs;
+
   void traces(pc_t pos, const std::vector<TraceEntry> &entries) const;
   void parse_constant_pool_entry(u16 &i);
   void verify_constant_pool_entry(u16 &i);
@@ -74,4 +82,6 @@ private:
     }
     return index;
   }
+
+  std::string format_cp_index(u16 i);
 };
