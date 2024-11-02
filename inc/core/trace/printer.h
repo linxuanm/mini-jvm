@@ -1,9 +1,7 @@
 #pragma once
 
 #include "options.h"
-#include "fmt/xchar.h"
 
-#include <iomanip>
 #include <sstream>
 #include <fmt/core.h>
 
@@ -11,20 +9,12 @@ namespace Trace {
 
 enum Align { ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER };
 
-// global line buffer for more control over output
-extern std::stringstream ss;
-
 std::string fit_in_width(const std::string &s, int width,
                          const std::string &pad, Align align = ALIGN_LEFT);
 
 template <typename... T>
 void O(fmt::format_string<T...> fmt, T &&... args) {
   fmt::print(stdout, fmt, std::forward<T>(args)...);
-}
-
-template <typename... T>
-void OS(fmt::format_string<T...> fmt, T &&... args) {
-  ss << fmt::format(fmt, std::forward<T>(args)...);
 }
 
 static void bar_with_bounds(const std::string &l, const std::string &r) {

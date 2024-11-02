@@ -3,6 +3,7 @@
 #include "core/specs/class_flags.h"
 
 #include <codecvt>
+#include <locale>
 
 void ClassFormatParser::traces(pc_t pos,
                                const std::vector<TraceEntry> &entries) const {
@@ -146,7 +147,9 @@ void ClassFormatParser::verify_constant_pool_entry(u16 &i) {
   }
 }
 
-void ClassFormatParser::parse_field_entry(u16 &i) {}
+void ClassFormatParser::parse_field_entry(u16 &i) {
+
+}
 
 std::string ClassFormatParser::decode_modified_utf8(u16 length) {
   const pc_t start_pc = parser.get_pc();
@@ -195,7 +198,7 @@ std::string ClassFormatParser::format_cp_index(u16 i) {
   case CONSTANT_Float:
     return fmt::format("{}f", data.float_info.val);
   case CONSTANT_Long:
-    break;
+    return fmt::format("{}l", data.long_info.val);
   case CONSTANT_Double:
     break;
   case CONSTANT_Class:
@@ -269,6 +272,7 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
   if (!parser_ok()) return;
   cf->fields.resize(fields_size);
   for (u16 i = 0; i < fields_size; i++) {
+    TRACE_DO(B, { Trace::col_1(fmt::format("--> entry #{}", i)); });
     parse_field_entry(i);
     if (!parser_ok()) return;
   }

@@ -2,8 +2,6 @@
 
 #include <regex>
 
-std::stringstream Trace::ss;
-
 static std::string strip_ansi_codes(const std::string &input) {
   return std::regex_replace(input, std::regex("\x1B\\[.*?m"), "");
 }
