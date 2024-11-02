@@ -71,17 +71,6 @@ private:
     return no_err;
   }
 
-  u16 read_cp_index(const char *msg, ConstantPoolTag tag) {
-    const u16 index = parser.read_wtag_u16(msg);
-    if (!parser.ok()) return 0;
-    if (index == 0 || index >= cf->constant_pool.size()) {
-      err_atpc(CF_InvalidIndex,
-               "constant pool index must be in range [1, {}], got {}",
-               cf->constant_pool.size() - 1, index);
-      return 0;
-    }
-    return index;
-  }
-
-  std::string format_cp_index(u16 i);
+  u16 read_cp_index(const char *msg, ConstantPoolTag tag, bool print = false);
+  [[nodiscard]] std::string format_cp_index(u16 i) const;
 };

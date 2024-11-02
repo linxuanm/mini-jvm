@@ -4,9 +4,7 @@
 #include <fmt/core.h>
 #include <fmt/color.h>
 
-#include "core/trace.h"
 #include "core/vmdefs.h"
-#include "core/error//VMError.h"
 
 #define CHECK_BOUNDS(n_read, ret_val, err_ret_val) \
   do { \
