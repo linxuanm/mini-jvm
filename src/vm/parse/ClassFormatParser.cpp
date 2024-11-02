@@ -23,10 +23,10 @@ void ClassFormatParser::parse_constant_pool_entry(ClassFile &cf, u16 &i) {
 
   switch (tag) {
   case CONSTANT_Utf8: {
-    const auto length = parser.read_wtag_u16("length");
-    const auto str = decode_modified_utf8(length);
+    const auto length     = parser.read_wtag_u16("length");
+    const auto str        = decode_modified_utf8(length);
     data.utf8_info.length = length;
-    data.utf8_info.bytes = new char[str.length() + 1];
+    data.utf8_info.bytes  = new char[str.length() + 1];
     std::strncpy(data.utf8_info.bytes, str.c_str(), length + 1);
     break;
   }
@@ -89,27 +89,32 @@ std::string ClassFormatParser::decode_modified_utf8(u16 length) {
   for (auto i = 0; i < length; i++) {
     const u16 x = parser.read_u8();
     if (!parser.ok()) return "";
-    if (x & 0x80 == 0) { // 0xxx_xxxx
+    if ((x & 0x80) == 0) {
+      // 0xxx_xxxx
       ss << static_cast<char>(x);
-    } else if (x >> 6 == 0b10) { // 10xx_xxxx
+    } else if (x >> 6 == 0b10) {
+      // 10xx_xxxx
       const u16 y = parser.read_u8();
       if (!parser.ok()) return "";
       const u16 sum = ((x & 0x1F) << 6) + (y & 0x3F);
       ss << cv.to_bytes(sum);
-    } else if (x >> 4 == 0xE) { // 1110_xxxx
+    } else if (x >> 4 == 0xE) {
+      // 1110_xxxx
       const u16 y = parser.read_u8();
       const u16 z = parser.read_u8();
       if (!parser.ok()) return "";
       const u16 sum = ((x & 0xF) << 12) + ((y & 0x3F) << 6) + (z & 0x3F);
       ss << cv.to_bytes(sum);
     } else {
-      err_atpc(CF_MalformedUTF8, "invalid UTF-8 encoding (start={})", start_pc);
+      err_atpc(CF_MalformedUTF8, "invalid UTF-8 encoding {:02X} (start={})", x,
+               start_pc);
       return "";
     }
   }
 
   const auto result = ss.str();
-  TRACE_DO(B, { parser.trace_bytes(result, start_pc, length); });
+  const auto pretty = fmt::format("\"{}\"", result);
+  TRACE_DO(B, { parser.trace_bytes(pretty, start_pc, length); });
   return result;
 }
 
