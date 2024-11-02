@@ -32,6 +32,19 @@ enum ConstantPoolTag {
   CONSTANT_Package = 20
 };
 
+constexpr ClassAccess ACC_FLAGS[] = {
+  ACC_PUBLIC,
+  ACC_FINAL,
+  ACC_SUPER,
+  ACC_INTERFACE,
+  ACC_ABSTRACT,
+  ACC_SYNTHETIC,
+  ACC_ANNOTATION,
+  ACC_ENUM,
+  ACC_MODULE,
+  {}
+};
+
 inline const char *render_ACC(ClassAccess ca) {
   switch (ca) {
   case ACC_PUBLIC:

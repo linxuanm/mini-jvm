@@ -40,7 +40,8 @@ public:
   }
 
   [[nodiscard]] std::string format_pc(pc_t ptr) const {
-    return fmt::format("{:+{}}", static_cast<int>(ptr), addr_width);
+    // extra {+1} for the plus sign in front
+    return fmt::format("{:+{}}", static_cast<int>(ptr), addr_width + 1);
   }
 
   u8 read_u8() { CHECK_BOUNDS(1, _read_u8(), 0); }

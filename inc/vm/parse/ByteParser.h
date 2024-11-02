@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ClassFile.h"
 #include "vm/parse/CodePtr.h"
 
 class ByteParser : public CodePtr {
@@ -23,7 +24,7 @@ public:
     return read_u32();
   }
 
-  u16 read_wtag_u64(const char *tag) {
+  u64 read_wtag_u64(const char *tag) {
     TRACE_DO(B, { trace_bytes(tag, 8); });
     return read_u64();
   }

@@ -37,6 +37,7 @@ void process_trace_options(const cxxopts::ParseResult &res) {
 #else
   if (res.count("trace") != 0) {
     std::cerr << "Invalid argument --trace: VM is not compiled with tracing on";
+    std::cerr << std::endl;
     exit(1);
   }
 #endif
@@ -45,6 +46,7 @@ void process_trace_options(const cxxopts::ParseResult &res) {
 std::string process_path_option(const cxxopts::ParseResult &res) {
   if (res.count("class") == 0) {
     std::cerr << "Invalid argument --class: no class file specified";
+    std::cerr << std::endl;
     exit(1);
   }
   return res["class"].as<std::string>();

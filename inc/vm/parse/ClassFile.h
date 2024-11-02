@@ -38,7 +38,7 @@ struct CPInfo {
 
     struct {
       u16 length;
-      u8 *bytes;
+      char *bytes;
     } utf8_info;
 
     struct {
