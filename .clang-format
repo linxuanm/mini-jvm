@@ -1,6 +1,5 @@
 BasedOnStyle: LLVM
-AlignConsecutiveAssignments: true
 AllowShortBlocksOnASingleLine: Always
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Always
-#AllowShortCaseLabelsOnASingleLine: true
+ColumnLimit: 100

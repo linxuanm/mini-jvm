@@ -7,8 +7,7 @@
 #include <codecvt>
 #include <locale>
 
-void ClassFormatParser::traces(pc_t pos,
-                               const std::vector<TraceEntry> &entries) const {
+void ClassFormatParser::traces(pc_t pos, const std::vector<TraceEntry> &entries) const {
   for (auto [tag, size] : entries) {
     parser.trace_bytes(tag, pos, size);
     pos += size;
@@ -16,46 +15,46 @@ void ClassFormatParser::traces(pc_t pos,
 }
 
 void ClassFormatParser::parse_constant_pool_entry(u16 &i) {
-  const pc_t pos    = parser.get_pc();
+  const pc_t pos = parser.get_pc();
   const auto cf_tag = static_cast<ConstantPoolTag>(parser.read_u8());
   if (!parser_ok()) return;
   TRACE_DO(B, { parser.trace_bytes(render_CONSTANT(cf_tag), pos, 1); });
 
   auto &[tag, data] = cf->constant_pool[i];
-  tag               = cf_tag;
+  tag = cf_tag;
 
   switch (tag) {
   case CONSTANT_Utf8: {
-    const auto length     = parser.read_wtag_u16("length");
-    const auto str        = decode_modified_utf8(length);
+    const auto length = parser.read_wtag_u16("length");
+    const auto str = decode_modified_utf8(length);
     data.utf8_info.length = length;
-    data.utf8_info.bytes  = new char[str.length() + 1];
+    data.utf8_info.bytes = new char[str.length() + 1];
     std::strncpy(data.utf8_info.bytes, str.c_str(), length + 1);
     const auto pretty = fmt::format("\"{}\"", str);
     TRACE_DO(B, { parser.trace_bytes(pretty, pos + 2, length); });
     break;
   }
   case CONSTANT_Integer: {
-    auto val          = parser.read_i32();
+    auto val = parser.read_i32();
     data.int_info.val = val;
     TRACE_DO(B, { parser.trace_bytes(fmt::format("{}", val), pos, 4); });
     break;
   }
   case CONSTANT_Float: {
-    auto val            = std::bit_cast<float>(parser.read_u32());
+    auto val = std::bit_cast<float>(parser.read_u32());
     data.float_info.val = val;
     TRACE_DO(B, { parser.trace_bytes(fmt::format("{}f", val), pos, 4); });
     break;
   }
   case CONSTANT_Long: {
-    auto val           = parser.read_i64();
+    auto val = parser.read_i64();
     data.long_info.val = val;
     TRACE_DO(B, { parser.trace_bytes(fmt::format("{}l", val), pos, 8); });
     i++;
     break;
   }
   case CONSTANT_Double: {
-    auto val             = std::bit_cast<double>(parser.read_u64());
+    auto val = std::bit_cast<double>(parser.read_u64());
     data.double_info.val = val;
     TRACE_DO(B, { parser.trace_bytes(fmt::format("{}d", val), pos, 8); });
     i++;
@@ -71,29 +70,23 @@ void ClassFormatParser::parse_constant_pool_entry(u16 &i) {
   case CONSTANT_Methodref:
   case CONSTANT_InterfaceMethodref:
     data.ref_info.class_index = parser.read_wtag_u16("name index");
-    data.ref_info.name_and_type_index =
-        parser.read_wtag_u16("name and type index");
+    data.ref_info.name_and_type_index = parser.read_wtag_u16("name and type index");
     break;
   case CONSTANT_NameAndType:
     data.nameandtype_info.name_index = parser.read_wtag_u16("name index");
-    data.nameandtype_info.descriptor_index = parser.read_wtag_u16(
-        "descriptor index");
+    data.nameandtype_info.descriptor_index = parser.read_wtag_u16("descriptor index");
     break;
   case CONSTANT_MethodHandle:
-    data.methodhandle_info.reference_kind = parser.read_wtag_u16(
-        "reference kind");
-    data.methodhandle_info.reference_index = parser.read_wtag_u16(
-        "reference index");
+    data.methodhandle_info.reference_kind = parser.read_wtag_u16("reference kind");
+    data.methodhandle_info.reference_index = parser.read_wtag_u16("reference index");
     break;
   case CONSTANT_MethodType:
-    data.methodtype_info.descriptor_index = parser.read_wtag_u16(
-        "descriptor index");
+    data.methodtype_info.descriptor_index = parser.read_wtag_u16("descriptor index");
     break;
   case CONSTANT_InvokeDynamic:
-    data.invokedynamic_info.bootstrap_method_attr_index = parser.
-        read_wtag_u16("bootstrap method attr index");
-    data.invokedynamic_info.name_and_type_index = parser.read_wtag_u16(
-        "name_and_type index");
+    data.invokedynamic_info.bootstrap_method_attr_index = parser.read_wtag_u16(
+        "bootstrap method attr index");
+    data.invokedynamic_info.name_and_type_index = parser.read_wtag_u16("name_and_type index");
     break;
   }
   parser_ok();
@@ -101,15 +94,14 @@ void ClassFormatParser::parse_constant_pool_entry(u16 &i) {
 
 bool ClassFormatParser::verify_cp_index(u16 index, ConstantPoolTag tag) {
   if (index == 0 || index >= cf->constant_pool.size()) {
-    err_atpc(CF_InvalidIndex,
-             "constant pool index must be in range [1, {}], got {}",
+    err_atpc(CF_InvalidIndex, "constant pool index must be in range [1, {}], got {}",
              cf->constant_pool.size() - 1, index);
     return false;
   }
   const auto &info = cf->constant_pool[index];
   if (info.tag != tag) {
-    err_atpc(CF_MismatchedCPType, "expected {} at constant_pool[{}], got {}",
-             render_CONSTANT(tag), index, render_CONSTANT(info.tag));
+    err_atpc(CF_MismatchedCPType, "expected {} at constant_pool[{}], got {}", render_CONSTANT(tag),
+             index, render_CONSTANT(info.tag));
     return false;
   }
   return true;
@@ -147,10 +139,8 @@ void ClassFormatParser::verify_constant_pool_entry(u16 &i) {
     verify_cp_index(data.methodtype_info.descriptor_index, CONSTANT_Utf8);
     break;
   case CONSTANT_InvokeDynamic:
-    cp_bootstrap_forward_refs.push_back(
-        data.invokedynamic_info.bootstrap_method_attr_index);
-    verify_cp_index(data.invokedynamic_info.name_and_type_index,
-                    CONSTANT_NameAndType);
+    cp_bootstrap_forward_refs.push_back(data.invokedynamic_info.bootstrap_method_attr_index);
+    verify_cp_index(data.invokedynamic_info.name_and_type_index, CONSTANT_NameAndType);
     break;
   }
 }
@@ -182,8 +172,7 @@ std::string ClassFormatParser::decode_modified_utf8(u16 length) {
       const u16 sum = ((x & 0xF) << 12) + ((y & 0x3F) << 6) + (z & 0x3F);
       ss << cv.to_bytes(sum);
     } else {
-      err_atpc(CF_MalformedUTF8, "invalid UTF-8 encoding {:02X} (start={})", x,
-               start_pc);
+      err_atpc(CF_MalformedUTF8, "invalid UTF-8 encoding {:02X} (start={})", x, start_pc);
       return "";
     }
   }
@@ -191,15 +180,13 @@ std::string ClassFormatParser::decode_modified_utf8(u16 length) {
   return ss.str();
 }
 
-u16 ClassFormatParser::read_cp_index(const char *msg, ConstantPoolTag tag,
-                                     bool print) {
-  const pc_t pos  = parser.get_pc();
+u16 ClassFormatParser::read_cp_index(const char *msg, ConstantPoolTag tag, bool print) {
+  const pc_t pos = parser.get_pc();
   const u16 index = parser.read_u16();
   if (!parser.ok()) return 0;
 
   if (index == 0 || index >= cf->constant_pool.size()) {
-    err_atpc(CF_InvalidIndex,
-             "constant pool index must be in range [1, {}], got {}",
+    err_atpc(CF_InvalidIndex, "constant pool index must be in range [1, {}], got {}",
              cf->constant_pool.size() - 1, index);
     return 0;
   }
@@ -258,14 +245,12 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
 
   const u32 magic = parser.read_wtag_u32("magic");
   if (!parser_ok()) return;
-  if (magic != 0xCAFEBABE)
-    return err_atpc(CF_NotAClassFile, "invalid header 0x{:X}", magic);
+  if (magic != 0xCAFEBABE) return err_atpc(CF_NotAClassFile, "invalid header 0x{:X}", magic);
 
   parser.read_wtag_u16("minor version");
   const u16 major = parser.read_wtag_u16("major version");
   if (!parser_ok()) return;
-  if (major != 52)
-    return err_atpc(CF_VersionMismatch, "require version 52, got {}", major);
+  if (major != 52) return err_atpc(CF_VersionMismatch, "require version 52, got {}", major);
 
   TRACE_DO(B, { Trace::mid_bar_text("Constant Pool"); });
   const u16 cf_size = parser.read_wtag_u16("constant pool count");
@@ -282,8 +267,8 @@ void ClassFormatParser::parse(ClassFile *in_cf, ByteArrayRef ref) {
   }
 
   TRACE_DO(B, { Trace::mid_bar_text("Class Info"); });
-  cf->access_flags     = parser.read_wtag_u16("access flags");
-  cf->this_class       = read_cp_index("this class", CONSTANT_Class, true);
+  cf->access_flags = parser.read_wtag_u16("access flags");
+  cf->this_class = read_cp_index("this class", CONSTANT_Class, true);
   const pc_t pre_super = parser.get_pc();
   const bool is_object = parser.read_u16() == 0;
   parser.reset(pre_super);
