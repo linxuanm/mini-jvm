@@ -1,4 +1,4 @@
-file(GLOB_RECURSE LIB_CORE_SRC ${ROOT}/src/core/*.cpp)
+file(GLOB_RECURSE LIB_CORE_SRC ${ROOT}/src/core/*.c ${ROOT}/src/core/*.cpp)
 add_library(core STATIC ${LIB_CORE_SRC})
 target_include_directories(core PRIVATE ${ROOT}/inc)
 

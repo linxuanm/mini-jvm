@@ -145,7 +145,9 @@ void ClassFormatParser::verify_constant_pool_entry(u16 &i) {
   }
 }
 
-void ClassFormatParser::parse_field_entry(u16 &i) {}
+void ClassFormatParser::parse_field_entry(u16 &i) {
+
+}
 
 std::string ClassFormatParser::decode_modified_utf8(u16 length) {
   const pc_t start_pc = parser.get_pc();
